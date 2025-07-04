@@ -4,13 +4,59 @@ A complete and simple web-based voting system built with **Python Flask**, **SQL
 
 ---
 
+## 💻 Database: SQLite + DB Browser
+
+This project uses **SQLite** as the database.
+
+### 💾 How to View the Data with DB Browser for SQLite
+
+#### ✅ Prerequisites
+
+* Install [**DB Browser for SQLite**](https://sqlitebrowser.org/dl/).
+
+#### 📂 Step-by-Step Instructions
+
+1. **Open DB Browser for SQLite**
+2. **Click on "Open Database"**, then choose:
+
+   * `voting_system.db` from your project folder
+3. **Click on "Browse Data" tab**
+
+   * Use the dropdown to view:
+
+     * `voter`
+     * `candidate`
+     * `vote`
+     * `user`
+4. **Click on "Execute SQL" tab** (optional)
+
+   * Run queries like:
+
+```sql
+SELECT * FROM voter;
+SELECT * FROM candidate;
+SELECT * FROM vote;
+SELECT * FROM user;
+```
+
+5. **Edit or Add Data (if needed)**
+
+   * Use "New Record" or edit cells
+   * Click **"Write Changes"** (top-left toolbar)
+6. **Save and Close**
+
+   * `File → Write Changes`
+   * Then `File → Close Database`
+
+---
+
 ## ⚙️ Tech Stack & Requirements
 
-- Python 3.11+
-- Flask 3.1.1
-- Flask-SQLAlchemy 3.1.1
-- Flask-Login
-- SQLite (default, easily switchable to PostgreSQL/MySQL)
+* Python 3.11+
+* Flask 3.1.1
+* Flask-SQLAlchemy 3.1.1
+* Flask-Login
+* SQLite (default, easily switchable to PostgreSQL/MySQL)
 
 ### Install dependencies:
 
@@ -25,7 +71,7 @@ pip install -r requirements.txt
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/yourusername/voting-system.git
+git clone https://github.com/YOUR_USERNAME/voting-system.git
 cd voting-system
 ```
 
@@ -56,108 +102,107 @@ http://127.0.0.1:5000/
 
 ---
 
-## 🧾 Data Models
+## 🗒️ Data Models
 
 ### Voter
 
-| Field        | Type    | Description          |
-|--------------|---------|----------------------|
-| id           | Integer | Primary Key          |
-| name         | String  | Required             |
-| email        | String  | Unique, Required     |
-| has_voted    | Boolean | Defaults to False    |
+| Field      | Type    | Description       |
+| ---------- | ------- | ----------------- |
+| id         | Integer | Primary Key       |
+| name       | String  | Required          |
+| email      | String  | Unique, Required  |
+| has\_voted | Boolean | Defaults to False |
 
 ### Candidate
 
-| Field     | Type    | Description       |
-|-----------|---------|-------------------|
-| id        | Integer | Primary Key       |
-| name      | String  | Required          |
-| party     | String  | Optional          |
-| votes     | Integer | Defaults to 0     |
+| Field | Type    | Description   |
+| ----- | ------- | ------------- |
+| id    | Integer | Primary Key   |
+| name  | String  | Required      |
+| party | String  | Optional      |
+| votes | Integer | Defaults to 0 |
 
 ### Vote
 
 | Field         | Type    | Description              |
-|---------------|---------|--------------------------|
+| ------------- | ------- | ------------------------ |
 | id            | Integer | Primary Key              |
-| voter_id      | Integer | Foreign Key to Voter     |
-| candidate_id  | Integer | Foreign Key to Candidate |
+| voter\_id     | Integer | Foreign Key to Voter     |
+| candidate\_id | Integer | Foreign Key to Candidate |
 
 ### User (Login)
 
-| Field     | Type    | Description              |
-|-----------|---------|--------------------------|
-| id        | Integer | Primary Key              |
-| username  | String  | Unique, Required         |
-| password  | String  | Hashed Password (SHA256) |
+| Field    | Type    | Description              |
+| -------- | ------- | ------------------------ |
+| id       | Integer | Primary Key              |
+| username | String  | Unique, Required         |
+| password | String  | Hashed Password (SHA256) |
 
 ---
 
 ## 🌐 Web Pages
 
-| Route                | Description                      |
-|----------------------|----------------------------------|
-| `/`                  | Home menu                        |
-| `/register-voter`    | Form to register a new voter     |
-| `/register-candidate`| Form to register a candidate     |
-| `/vote`              | Submit a vote                    |
-| `/statistics`        | Voting statistics                |
-| `/login`             | Login page (user/password)       |
+| Route                 | Description                  |
+| --------------------- | ---------------------------- |
+| `/`                   | Home                         |
+| `/register-voter`     | Register a new voter         |
+| `/register-candidate` | Register a new candidate     |
+| `/vote`               | Submit a vote                |
+| `/statistics`         | View voting results          |
+| `/login`              | Login with username/password |
 
 ---
-FOR TEST EACH ENDPOINT USE POSTMAN OR A SIMILAR APP
 
-## 📡 REST API Endpoints
+## 📡 REST API Endpoints (Test via Postman or curl)
 
-### VOTERS
+### Voters
 
-- `POST /voters` — Register a new voter
-- `GET /voters` — Get all voters
-- `GET /voters/<id>` — Get voter by ID
-- `DELETE /voters/<id>` — Delete voter by ID
+* `POST /voters` — Register voter
+* `GET /voters` — List all voters
+* `GET /voters/<id>` — Get voter by ID
+* `DELETE /voters/<id>` — Delete voter
 
-### CANDIDATES
+### Candidates
 
-- `POST /candidates` — Register a new candidate
-- `GET /candidates` — Get all candidates
-- `GET /candidates/<id>` — Get candidate by ID
-- `DELETE /candidates/<id>` — Delete candidate
+* `POST /candidates` — Register candidate
+* `GET /candidates` — List all candidates
+* `GET /candidates/<id>` — Get candidate by ID
+* `DELETE /candidates/<id>` — Delete candidate
 
-### VOTES
+### Votes
 
-- `POST /votes` — Cast a vote `{voter_id, candidate_id}`
-- `GET /votes` — Get all votes
-- `GET /votes/statistics` — Statistics (votes per candidate, percent, etc.)
+* `POST /votes` — Cast a vote `{voter_id, candidate_id}`
+* `GET /votes` — List all votes
+* `GET /votes/statistics` — Stats: totals, percentages
 
 ---
 
 ## ✅ Business Rules
 
-- A user **cannot be both a candidate and a voter**
-- Each voter can **only vote once**
-- Candidate vote count and voter status are updated automatically
-- Passwords are stored securely (hashed)
+* Voter **cannot be a candidate** and vice versa
+* Each voter **can only vote once**
+* After voting, voter's `has_voted = True`
+* Candidate's vote count auto-increments
+* Passwords are securely hashed
 
 ---
 
-## 🔧 Configuration
+## 🔧 Configuration (for DB change)
 
-To switch databases:
+In `app.py`, change:
 
 ```python
-# In app.py
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///voting_system.db'
 ```
 
 Replace with:
 
-- PostgreSQL: `'postgresql://user:password@localhost/dbname'`
-- MySQL: `'mysql+pymysql://user:password@localhost/dbname'`
+* PostgreSQL: `'postgresql://user:pass@localhost/dbname'`
+* MySQL: `'mysql+pymysql://user:pass@localhost/dbname'`
 
 ---
 
-## 🗂️ Project Structure
+## 📂 Project Structure
 
 ```
 .
@@ -190,30 +235,25 @@ git remote add origin https://github.com/YOUR_USERNAME/voting-system.git
 git push -u origin main
 ```
 
-📸 Add a screenshot of the `/statistics` page in the repo to showcase voting results.
-IN THE SCREENSHOT WEE CAN SEE WHAT HERE  WE HAS 5 VOTES. THAT S ARE THE TOTAL OF VOTED TIMES.
-HOW I ERASE IT, NOT APPEAR THE TOTAL OF VOTERS, BUT YES IS THE REGISTER OF HOW MUCH VOTES GOES UNTIL THE MOMENT.
+Add a screenshot of the `/statistics` page showing voting results (e.g., **5 votes** so far).
+
 ---
 
-## 🔐 Enabling the Login Functionality
+## 🔐 Enabling the Login System
 
-The login system is already **implemented** using `Flask-Login`, but not fully active. To enable:
-
-1. **Uncomment this line in `app.py`:**
+1. In `app.py`, uncomment:
 
 ```python
 # login_manager.login_view = 'auth_bp.login'
 ```
 
-2. This ensures unauthorized users are redirected to the login page.
+2. This will redirect unauthorized users to `/login`
 
 ---
 
-## 🧪 Create Admin User for Login (Manual)
+## 🦖 Create Admin User (Manually)
 
-You can create a user manually to log in:
-
-### 1. Generate a password hash
+1. **Generate hashed password:**
 
 ```bash
 python
@@ -224,46 +264,40 @@ from werkzeug.security import generate_password_hash
 print(generate_password_hash("yourpassword"))
 ```
 
-Copy the hashed password.
-
-### 2. Open SQLite CLI and insert the user
+2. **Insert user into DB:**
 
 ```bash
 sqlite3 voting_system.db
 ```
 
 ```sql
-INSERT INTO user (username, password) VALUES ('admin', 'PASTE_HASHED_PASSWORD_HERE');
+INSERT INTO user (username, password) VALUES ('admin', 'HASHED_PASSWORD');
 .exit
 ```
 
-Now go to `/login` and try logging in with the credentials.
-
-> 💡 Don't forget: The login only protects endpoints that use `@login_required` in `auth_routes.py`. You can add it elsewhere if needed.
+Login via `/login`
 
 ---
 
 ## 🚀 Suggestions for Improvement
 
-- Use JWT for API login
-- Add pagination and search on candidate list
-- Export results as CSV
-- Create admin dashboard with Flask-Admin
-- Add unit tests for endpoints
+* Use JWT for API login
+* Add pagination and filtering
+* CSV export of vote data
+* Admin dashboard with Flask-Admin
+* Unit tests with Pytest
 
 ---
 
-## 🧠 Summary
+## 🤔 Summary
 
-✔️ Vote registration  
-✔️ Candidacy registration  
-✔️ One-time voting enforcement  
-✔️ REST API + Web Forms  
-✔️ Login system (ready to enable)  
-✔️ Statistics view  
-✔️ Clean code with MVC organization
+✔️ Register voters & candidates
+✔️ Secure voting system (1 vote per person)
+✔️ Clean REST API & HTML forms
+✔️ Login system ready-to-use
+✔️ Real-time vote statistics
+✔️ DB browser-friendly (SQLite)
 
 ---
 
-Made with ❤️ using Flask.  
-Feel free to contribute with issues or pull requests!
+Made with ❤️ using Flask. Pull requests welcome!
